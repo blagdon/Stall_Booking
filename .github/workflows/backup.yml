@@ -28,7 +28,8 @@ jobs:
         env:
           DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
-          pg_dump "$DB_URL" -f backup.sql --clean --if-exists --no-owner --no-privileges
+          # Use the DIRECT path to the Postgres 17 binary to avoid version mismatch
+          /usr/lib/postgresql/17/bin/pg_dump "$DB_URL" -f backup.sql --clean --if-exists --no-owner --no-privileges
 
       - name: Upload to GitHub Artifacts
         uses: actions/upload-artifact@v4
