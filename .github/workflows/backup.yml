@@ -13,7 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # UPDATED STEP: Install PostgreSQL 17 Client
       - name: Install PostgreSQL 17 Client
         run: |
           sudo apt-get install -y wget gnupg2 lsb-release curl
@@ -29,7 +28,6 @@ jobs:
         env:
           DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
-          # The -v flag adds verbose logging
           pg_dump "$DB_URL" -f backup.sql --clean --if-exists --no-owner --no-privileges
 
       - name: Upload to GitHub Artifacts
