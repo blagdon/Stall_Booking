@@ -13,14 +13,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # THIS IS THE NEW FIX: Force install Postgres 16 Client
-      - name: Install PostgreSQL 16 Client
+      # UPDATED STEP: Install PostgreSQL 17 Client
+      - name: Install PostgreSQL 17 Client
         run: |
-          sudo apt-get install -y wget gnupg2
+          sudo apt-get install -y wget gnupg2 lsb-release curl
+          # Add the official Postgres APT repository
           sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          # Import the repository signing key
+          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+          # Update package list and install version 17
           sudo apt-get update
-          sudo apt-get install -y postgresql-client-16
+          sudo apt-get install -y postgresql-client-17
 
       - name: Dump Database
         env:
